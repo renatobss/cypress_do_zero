@@ -38,18 +38,37 @@ describe('Teste de Login', () => {
     cy.get('[data-testid="senha"]').type('123')
     cy.get('[data-testid="entrar"]').click()
 
+// aguarda a UI renderizar alerta OU redirecionar
+  cy.wait(3000)
+
+  // valida erro de login
+  cy.get('body').then($body => {
+    if ($body.find('.alert').length) {
+      throw new Error('Login inválido — encerrando o teste')
+    }
+  })
+    cy.contains('h1', 'Bem Vindo').should('be.visible')
+
     //clicar para cadastrar o usuário
-    cy.get('[data-testid="cadastrarUsuarios"]').click()
-    cy.get('h1').contains('Cadastro de usuários')
+      cy.get('[data-testid="cadastrarUsuarios"]').click()
+      cy.get('h1').contains('Cadastro de usuários')
 
     //informar os dados do novo usuário
-    cy.get('[data-testid="nome"]').type('juca')
-    cy.get('[data-testid="email"]').type('juca@teste.com.br')
-    cy.get('[data-testid="password"]').type('123')
-    cy.get('[data-testid="cadastrarUsuario"]').click()
-    cy.wait(5000)
-    cy.get('h1').contains('Lista dos usuários')
+      cy.get('[data-testid="nome"]').type('juca1')
+      cy.get('[data-testid="email"]').type('juca@teste1.com.br')
+      cy.get('[data-testid="password"]').type('123')
+      cy.get('[data-testid="cadastrarUsuario"]').click()
+      cy.wait(5000)
 
+    //valida erro ao cadastrar usuário
+    cy.get('body').then($body => {
+      if($body.find('.alert').length){
+        throw new Error('Erro ao cadastrar usuário - encerrando o teste')
+      }
+    })    
+
+    cy.contains('h1', 'Lista dos usuários').should('be.visible')
+    
     //próximo dia verificar quando não consegue cadastrar o usuário, pois dá erro quando tento listar os usuários (Inserir verificação para garantir)
     //que somente tente listar os usuário quando conseguir cadastrar.
 
