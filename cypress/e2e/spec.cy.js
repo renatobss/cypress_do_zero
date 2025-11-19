@@ -68,9 +68,6 @@ describe('Teste de Login', () => {
     })    
 
     cy.contains('h1', 'Lista dos usuários').should('be.visible')
-    
-    //próximo dia verificar quando não consegue cadastrar o usuário, pois dá erro quando tento listar os usuários (Inserir verificação para garantir)
-    //que somente tente listar os usuário quando conseguir cadastrar.
 
   })
 
