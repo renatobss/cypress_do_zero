@@ -1,25 +1,30 @@
 describe('Login', () => {
-    it("Realizar login com sucesso", () => {
-        cy.visit("https://www.saucedemo.com");
-
-        cy.get('[data-test="username"]').type('standard_user');
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
-
-        cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');
-
+    beforeEach(() => {
+        cy.visit('/');
     })
-
-    it("Realizar login com sucesso usando comandos personalizados", () => {
-        cy.visit("https://www.saucedemo.com");
-        cy.login('standard_user', 'secret_sauce');
-
+  
+    it.only("Realizar login com sucesso", () => {
+            
+        cy.login('standard_user', 'secret_sauce')
         cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');
+
+        cy.location().then((loc) => {
+            const u = loc.pathname
+            //cy.log(u)
+            expect(u).to.equal('/inventory.html');
+        })
+
+        //a ação com then acima não precisava, fiz para praticar e entender melhor, o correto é a verificação abaixo
+        cy.location('pathname').should('eq', '/inventory.html');
+
+        cy.location().then((ver) => {
+            console.log(ver);
+        })
 
     })
 
     it("Realizar teste de login com falha", () => {
-        cy.visit("https://www.saucedemo.com");
+        cy.visit('/');
         cy.login('aaaaa', '4d554545');
 
         cy.get('[data-test="error"]').should(
@@ -28,8 +33,8 @@ describe('Login', () => {
         );
     })
 
-    it.only("Realizar teste de login, validando usuário / senha não informado", () => {
-        cy.visit("https://www.saucedemo.com");
+    it("Realizar teste de login, validando usuário / senha não informado", () => {
+        cy.visit('/')
         cy.get('[data-test="username"]').type('standard_user');
         cy.get('[data-test="login-button"]').click();
 
@@ -39,3 +44,4 @@ describe('Login', () => {
     })
 
 })
+
